@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "252128542506",
+    "project_id": "transportbelarus-139",
+    "storage_bucket": "transportbelarus-139.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:252128542506:android:ce2b8cfaf0aac92fce6853",
+        "android_client_info": {
+          "package_name": "com.example.transport_belarus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "252128542506-dh6cv6a0gapqvkbvoean6sna5pnomvda.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.transport_belarus",
+            "certificate_hash": "9961fe129b1cd4e0e745e32f0fc89e39cfe65cd4"
+          }
+        },
+        {
+          "client_id": "252128542506-59o9ilv7poq6vi7v70rklgq56ahpie07.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhckrvLHoJuOINlqrZU8-UPMUjUVO74mM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "252128542506-59o9ilv7poq6vi7v70rklgq56ahpie07.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
