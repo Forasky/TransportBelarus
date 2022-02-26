@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
-import 'package:transport_belarus/bloc/main_screen_bloc.dart';
-import 'package:transport_belarus/model/main_screen_bloc.dart';
+import 'package:transport_belarus/bloc/bottom_sheet_bloc.dart';
+import 'package:transport_belarus/model/bottom_sheet_model.dart';
 import 'package:transport_belarus/services/fonts.dart';
 import 'package:transport_belarus/services/translation.dart';
 
@@ -15,22 +15,20 @@ class BottomSheetWidget extends StatefulWidget {
   State<BottomSheetWidget> createState() => _BottomSheetWidgetState();
 }
 
-enum collection { people, cars }
-
 class _BottomSheetWidgetState extends State<BottomSheetWidget> {
   var _isRadioSelected = false;
-  final mainBloc = GetIt.instance.get<MainScreenBloc>();
-  final fromController = TextEditingController();
-  final toController = TextEditingController();
   final dateController = TextEditingController();
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final paymentController = TextEditingController();
+  final bloc = GetIt.instance.get<BottomSheetBloc>();
+  String fromRegion = 'Брестская обл.';
+  String toRegion = 'Брестская обл.';
+  late String fromCity;
+  late String toCity;
 
   @override
   void dispose() {
-    fromController.dispose();
-    toController.dispose();
     dateController.dispose();
     nameController.dispose();
     phoneController.dispose();
@@ -39,9 +37,14 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
   }
 
   @override
+  void initState() {
+    bloc.state.regions.isEmpty ? bloc.readList() : super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MainScreenBloc, MainScreenBlocState>(
-      bloc: mainBloc,
+    return BlocBuilder<BottomSheetBloc, BottomSheetState>(
+      bloc: bloc,
       builder: (context, state) {
         return Column(
           children: <Widget>[
@@ -64,26 +67,61 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Expanded(
-                    child: TextField(
-                      controller: fromController,
-                      decoration: InputDecoration(
-                        icon: Text(
-                          LocalizationKeys.from,
-                          style: Font.joseStyleGrey16,
-                        ),
-                      ),
-                    ),
+                    child: state.regions.isEmpty
+                        ? const CircularProgressIndicator()
+                        : Column(
+                            children: [
+                              Text(
+                                LocalizationKeys.from,
+                                style: Font.joseStyleGrey16,
+                              ),
+                              DropDownButton(
+                                dropDownValue: state.regions.first.name,
+                                listItem:
+                                    state.regions.map((e) => e.name).toList(),
+                                onValueChanged: (value) {
+                                  setState(() {
+                                    fromRegion = value;
+                                  });
+                                },
+                              ),
+                              DropDownButton(
+                                dropDownValue:
+                                    state.regions.first.cities.first.name,
+                                listItem: state.regions
+                                    .where(
+                                      (e) => e.name.contains(fromRegion),
+                                    )
+                                    .map(
+                                      (e) => e.cities
+                                          .map(
+                                            (e) => e.name,
+                                          )
+                                          .toList(),
+                                    )
+                                    .toList(),
+                                onValueChanged: (value) => fromCity = value,
+                              ),
+                            ],
+                          ),
                   ),
                   Expanded(
-                    child: TextField(
-                      controller: toController,
-                      decoration: InputDecoration(
-                        icon: Text(
-                          LocalizationKeys.to,
-                          style: Font.joseStyleGrey16,
-                        ),
-                      ),
-                    ),
+                    child: state.regions.isEmpty
+                        ? const CircularProgressIndicator()
+                        : Column(
+                            children: [
+                              Text(
+                                LocalizationKeys.to,
+                                style: Font.joseStyleGrey16,
+                              ),
+                              DropDownButton(
+                                dropDownValue: state.regions.first.name,
+                                listItem:
+                                    state.regions.map((e) => e.name).toList(),
+                                onValueChanged: (value) => toRegion = value,
+                              ),
+                            ],
+                          ),
                   ),
                 ],
               ),
@@ -147,7 +185,7 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
                         icon: const Icon(
                           FontAwesomeIcons.phoneAlt,
                         ),
-                        hintText: LocalizationKeys.enterNubmer,
+                        hintText: LocalizationKeys.enterNumber,
                       ),
                     ),
                   ),
@@ -207,12 +245,14 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
                     ),
                     onPressed: () {
                       Navigator.pop(context);
-                      mainBloc.addRequest(
-                        LocalizationKeys.people,
-                        fromController.text,
+                      bloc.addRequest(
+                        _isRadioSelected == true
+                            ? LocalizationKeys.people
+                            : LocalizationKeys.cars,
+                        fromCity.toString(),
                         phoneController.text,
                         paymentController.text,
-                        toController.text,
+                        toCity.toString(),
                         DateFormat('d.m.y').parse(dateController.text),
                         nameController.text,
                       );
@@ -293,6 +333,58 @@ class LabeledRadio extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class DropDownButton extends StatefulWidget {
+  DropDownButton({
+    Key? key,
+    required this.dropDownValue,
+    required this.listItem,
+    required this.onValueChanged,
+  }) : super(key: key);
+  String dropDownValue;
+  List listItem;
+  ValueChanged<String> onValueChanged;
+
+  @override
+  State<DropDownButton> createState() => _DropDownButtonState();
+}
+
+class _DropDownButtonState extends State<DropDownButton> {
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<String>(
+      value: widget.dropDownValue,
+      elevation: 16,
+      style: const TextStyle(
+        color: Colors.green,
+      ),
+      underline: Container(
+        height: 2,
+        color: Colors.green,
+      ),
+      onChanged: (
+        String? newValue,
+      ) {
+        setState(
+          () {
+            widget.dropDownValue = newValue!;
+            widget.onValueChanged(newValue);
+          },
+        );
+      },
+      items: widget.listItem.map<DropdownMenuItem<String>>(
+        (value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(
+              value,
+            ),
+          );
+        },
+      ).toList(),
     );
   }
 }

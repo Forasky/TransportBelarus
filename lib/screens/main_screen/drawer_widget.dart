@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:transport_belarus/screens/profile_screen/profile_screen.dart';
 import 'package:transport_belarus/screens/settings_screen/settings_screen.dart';
 import 'package:transport_belarus/services/fonts.dart';
 import 'package:transport_belarus/services/translation.dart';
@@ -43,7 +44,14 @@ class DrawerWidget extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfileScreen(),
+                      ),
+                    );
+                  },
                   child: Text(
                     LocalizationKeys.viewProfile,
                     style: Font.joseStyleWhite20,

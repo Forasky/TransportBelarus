@@ -30,5 +30,14 @@
     "Settings": "Настройки",
     "ChooseLanguage": "Выберите язык",
     "CurrentLanguage": "Текущий язык:",
-    "IWantFind": "Я хочу найти..."
+    "IWantFind": "Я хочу найти...",
+    "incorrect user": "Неверный пользователь",
+    "incorrect password": "Пароль неправильный",
+    "account exist": "Для такого email аккаунт уже зарегестрирован",
+    "no found": "Пользователь не найден",
+    "enter Email": "Введите email",
+    "please enter Email": "Пожалуйста, введите корректный email",
+    "enter password": "Введите пароль",
+    "please enter password": "Пароль должен содержать минимум 6 символов!",
+    "error": "Ошибка"
 }
