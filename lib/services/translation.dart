@@ -10,7 +10,7 @@ class LocalizationKeys {
   static String forgotPassword = 'ForgotPassword'.tr();
   static String labelRegistration = 'LabelRegistration'.tr();
   static String enterFLname = 'EnterFirstLastName'.tr();
-  static String enterNubmer = 'EnterNumber'.tr();
+  static String enterNumber = 'EnterNumber'.tr();
   static String repeatPassword = 'RepeatPassword'.tr();
   static String findPeople = 'FindPeople'.tr();
   static String findCars = 'FindCars'.tr();
@@ -36,4 +36,13 @@ class LocalizationKeys {
   static String chooseLang = 'ChooseLanguage'.tr();
   static String currentLang = 'CurrentLanguage'.tr();
   static String iWantFind = 'IWantFind'.tr();
+  static String incorrectUser = 'incorrect user'.tr();
+  static String incorrectPassword = 'incorrect password'.tr();
+  static String accountExist = 'account exist'.tr();
+  static String userNoFound = 'no found'.tr();
+  static String enterEmail = 'enter Email'.tr();
+  static String plsEnterEmail = 'please enter email'.tr();
+  static String enterPassword = 'enter password'.tr();
+  static String plsEnterPassword = 'please enter password'.tr();
+  static String error = 'error'.tr();
 }
